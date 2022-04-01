@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -26,11 +27,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
-@ExtendWith(FindSlowTestExtension.class)
+// @ExtendWith(FindSlowTestExtension.class) 선언적 테스트 확장 모델
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메소드명에서 언더스코어를 공백으로 치환한다.
 class StudyTest {
 
     int value = 1;
+
+    /* 구현적(프로그래밍 등록) 테스트 확장 모델 */
+    @RegisterExtension
+    static FindSlowTestExtension findSlowTestExtension = new FindSlowTestExtension(1000L);
+    /* 구현적(프로그래밍 등록) 테스트 확장 모델 */
 
     /* Junit5 Assertion */
     @Test
