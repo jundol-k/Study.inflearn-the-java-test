@@ -2,6 +2,7 @@ package com.example.inflean_java_test;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
+@ExtendWith(FindSlowTestExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메소드명에서 언더스코어를 공백으로 치환한다.
 class StudyTest {
 
@@ -50,12 +52,14 @@ class StudyTest {
     }
 
     @Test
+    // @SlowTest // 주석해제시 mark 가 찍히지 않음.
     @DisplayName("예외 예측하기")
-    void assert_exception() {
+    void assert_exception() throws InterruptedException {
         System.out.println("value++ = " + value++);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             new Study(-10);
         });
+        Thread.sleep(1005L);
         String message = exception.getMessage();
         assertEquals("limit은 0보다 커야한다.", message);
     }
