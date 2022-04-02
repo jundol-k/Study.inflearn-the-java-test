@@ -2,6 +2,7 @@ package com.example.inflean_java_test.study;
 
 import com.example.inflean_java_test.domain.Member;
 import com.example.inflean_java_test.domain.Study;
+import com.example.inflean_java_test.domain.StudyStatus;
 import com.example.inflean_java_test.member.MemberService;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 import org.junit.jupiter.api.DisplayName;
@@ -110,5 +111,23 @@ class StudyServiceTest {
     @DisplayName("BDD 스타일 API")
     void bdd() {
 
+    }
+
+    @DisplayName("다른 사용자가 볼 수 있도록 스터디를 공개한다 (연습문제)")
+    @Test
+    void openStudy() {
+        // Given
+        StudyService studyService = new StudyService(memberService, studyRepository);
+        Study study = new Study(10, "더 자바 테스트");
+
+        given(studyRepository.save(study)).willReturn(study);
+
+        // When
+        studyService.openStudy(study);
+
+        // Then
+        assertEquals(study.getStatus(), StudyStatus.OPENED);
+        assertNotNull(study.getOpenedDateTime());
+        then(memberService).should(times(1)).notify(study);
     }
 }
