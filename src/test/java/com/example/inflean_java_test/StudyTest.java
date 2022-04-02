@@ -46,7 +46,7 @@ class StudyTest {
 
         assertAll(
                 () -> assertNotNull(study),
-                () -> assertTrue(study.getLimit() > 0, () -> "스터디 최대 참석 가능 인원은 0 보다 커야 한다."),
+                //() -> assertTrue(study.getLimit() > 0, () -> "스터디 최대 참석 가능 인원은 0 보다 커야 한다."),
                 () -> assertEquals(StudyStatus.DRAFT, study.getStatus(), new Supplier<String>() {
                     @Override
                     public String get() {
@@ -99,8 +99,8 @@ class StudyTest {
         assumeTrue("LOCAL".equalsIgnoreCase(test_env)); // 맞지 않으므로 아래 테스트를 실행하지 않고 종료함.
 
         Study study = new Study(10);
-        assertEquals(10, study.getLimit());
-        System.out.println("study.getLimit() = " + study.getLimit());
+//        assertEquals(10, study.getLimit());
+//        System.out.println("study.getLimit() = " + study.getLimit());
     }
 
     @Test
@@ -112,15 +112,15 @@ class StudyTest {
         assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
             // 앞의 조건이 맞을경우에만 실행한다.
             Study study = new Study(100);
-            assertEquals(100, study.getLimit());
-            System.out.println("study.getLimit() = " + study.getLimit());
+//            assertEquals(100, study.getLimit());
+//            System.out.println("study.getLimit() = " + study.getLimit());
         });
 
         assumingThat("DEV".equalsIgnoreCase(test_env), () -> {
             // 앞의 조건이 맞을경우에만 실행한다.
             Study study = new Study(10);
-            assertEquals(10, study.getLimit());
-            System.out.println("study.getLimit() = " + study.getLimit());
+//            assertEquals(10, study.getLimit());
+//            System.out.println("study.getLimit() = " + study.getLimit());
         });
     }
 
@@ -129,8 +129,8 @@ class StudyTest {
     @EnabledOnOs({OS.MAC})
     void enable_annotation_os() {
         Study study = new Study(100);
-        assertEquals(100, study.getLimit());
-        System.out.println("study.getLimit() = " + study.getLimit());
+//        assertEquals(100, study.getLimit());
+//        System.out.println("study.getLimit() = " + study.getLimit());
     }
 
     @Test
@@ -138,8 +138,8 @@ class StudyTest {
     @EnabledOnJre({JRE.JAVA_8, JRE.JAVA_11})
     void enable_annotation_jre() {
         Study study = new Study(100);
-        assertEquals(100, study.getLimit());
-        System.out.println("study.getLimit() = " + study.getLimit());
+//        assertEquals(100, study.getLimit());
+//        System.out.println("study.getLimit() = " + study.getLimit());
     }
 
     @Test
@@ -147,8 +147,8 @@ class StudyTest {
     @EnabledIfEnvironmentVariable(named = "TEST_ENV", matches = "local")
     void enable_if_environment_variable() {
         Study study = new Study(100);
-        assertEquals(100, study.getLimit());
-        System.out.println("study.getLimit() = " + study.getLimit());
+//        assertEquals(100, study.getLimit());
+//        System.out.println("study.getLimit() = " + study.getLimit());
     }
 
     /* 조건에 따라 테스트 실행하기 */
@@ -159,7 +159,7 @@ class StudyTest {
     @Tag("fast")
     void tagging() {
         Study study = new Study(10);
-        assertEquals(10, study.getLimit());
+        //assertEquals(10, study.getLimit());
     }
     /* tagging , filtering */
     /* custom tag */
@@ -167,14 +167,14 @@ class StudyTest {
     @FastTest
     void customTagFast() {
         Study study = new Study(10);
-        assertEquals(10, study.getLimit());
+        // assertEquals(10, study.getLimit());
     }
 
     @DisplayName("커스텀 태그 - slow")
     @SlowTest
     void customTagSlow() {
         Study study = new Study(10);
-        assertEquals(10, study.getLimit());
+        // assertEquals(10, study.getLimit());
     }
     /* custom tag */
 
@@ -216,7 +216,7 @@ class StudyTest {
     @ParameterizedTest(name = "{index} {displayName} message = {0}")
     @ValueSource(ints = {10, 20, 40})
     void repeatSacTest(@ConvertWith(StudyConverter.class) Study study) {
-        System.out.println("study.getLimit() = " + study.getLimit());
+        // System.out.println("study.getLimit() = " + study.getLimit());
     }
 
     static class StudyConverter extends SimpleArgumentConverter {
