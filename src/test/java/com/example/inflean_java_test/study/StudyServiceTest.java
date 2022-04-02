@@ -7,6 +7,7 @@ import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.OngoingStubbing;
@@ -61,5 +62,35 @@ class StudyServiceTest {
 
         assertNotNull(study.getOwnerId());
         assertEquals(member.getId(), study.getOwnerId());
+    }
+
+    @Test
+    @DisplayName("Mock 객체 확인")
+    void checkingMock() {
+        StudyService studyService = new StudyService(memberService, studyRepository);
+
+        Study study = new Study(10, "테스트");
+        Member member = new Member();
+        member.setId(1L);
+        member.setEmail("jundol1@email.com");
+
+        when(memberService.findById(1L)).thenReturn(Optional.of(member));
+        when(studyRepository.save(study)).thenReturn(study);
+
+        studyService.createNewStudy(1L, study);
+
+        assertNotNull(study.getOwnerId());
+        assertEquals(member.getId(), study.getOwnerId());
+
+        // 호출 수 확인
+        verify(memberService, times(1)).notify(study); // 딱 한 번 호출됐어야 한다. 안 하면 에러가 발생함.
+        verify(memberService, never()).validate(1L); // 호출되지 말아야 한다.
+
+        // 순서가 중요한 경우
+        InOrder inOrder = inOrder(memberService);
+        inOrder.verify(memberService).notify(study);
+        // inOrder.verify(memberService).notify(member);
+
+        verifyNoMoreInteractions(memberService); // 어떠한 액션 이후에 mock을 사용하지 말아야 한다.
     }
 }
