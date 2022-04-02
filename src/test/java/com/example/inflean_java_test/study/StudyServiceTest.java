@@ -16,6 +16,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,8 +67,9 @@ class StudyServiceTest {
     }
 
     @Test
-    @DisplayName("Mock 객체 확인")
+    @DisplayName("Mock 객체 확인 & BDD")
     void checkingMock() {
+        // Given
         StudyService studyService = new StudyService(memberService, studyRepository);
 
         Study study = new Study(10, "테스트");
@@ -77,8 +80,14 @@ class StudyServiceTest {
         when(memberService.findById(1L)).thenReturn(Optional.of(member));
         when(studyRepository.save(study)).thenReturn(study);
 
+        given(memberService.findById(1L)).willReturn(Optional.of(member));
+        given(studyRepository.save(study)).willReturn(study);
+
+        // When
         studyService.createNewStudy(1L, study);
 
+
+        // Then
         assertNotNull(study.getOwnerId());
         assertEquals(member.getId(), study.getOwnerId());
 
@@ -86,11 +95,20 @@ class StudyServiceTest {
         verify(memberService, times(1)).notify(study); // 딱 한 번 호출됐어야 한다. 안 하면 에러가 발생함.
         verify(memberService, never()).validate(1L); // 호출되지 말아야 한다.
 
+        then(memberService).should(times(1)).notify(study);
+        then(memberService).shouldHaveNoMoreInteractions();
+
         // 순서가 중요한 경우
         InOrder inOrder = inOrder(memberService);
         inOrder.verify(memberService).notify(study);
         // inOrder.verify(memberService).notify(member);
 
         verifyNoMoreInteractions(memberService); // 어떠한 액션 이후에 mock을 사용하지 말아야 한다.
+    }
+
+    @Test
+    @DisplayName("BDD 스타일 API")
+    void bdd() {
+
     }
 }
