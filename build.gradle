@@ -26,6 +26,11 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
+    testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.16.3'
+    // https://mvnrepository.com/artifact/org.testcontainers/postgresql
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.16.3'
+
+
 }
 
 //tasks.named('test') {

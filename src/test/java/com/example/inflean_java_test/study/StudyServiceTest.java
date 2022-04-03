@@ -128,6 +128,6 @@ class StudyServiceTest {
         // Then
         assertEquals(study.getStatus(), StudyStatus.OPENED);
         assertNotNull(study.getOpenedDateTime());
-        then(memberService).should(times(1)).notify(study);
+        then(memberService).should().notify(study);
     }
 }
